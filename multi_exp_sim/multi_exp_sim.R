@@ -8,20 +8,20 @@ library(broom)
 library(purrr)
 source("basic_utils.R")
 source("batch_utils.R")
+TEST <- TRUE
 source("parameter_space.R")
 format_percent <- function(x, digits = 2) paste0(round(100 * x, digits), "%")
 sig_thres <- 0.05
 nreps <- 10
-days <- 30
+days <- 7
 
-# Binomial (Proportion)
-bin_design <- design %>% filter(category == 'binomial')
+# Bernoulli (Proportion)
 
-for(row in 1:nrow(bin_design)){
-  effect <- bin_design[row,'effect']
-  alpha <- bin_design[row, 'prior_alpha']
-  beta <- bin_design[row, 'prior_beta']
-  per_day <- bin_design[row, 'sample_size_per_day'] # small sample for dev
+for(row in 1:nrow(ber_design)){
+  effect <- ber_design[row,'effect']
+  alpha <- ber_design[row, 'prior_alpha']
+  beta <- ber_design[row, 'prior_beta']
+  per_day <- ber_design[row, 'sample_size_per_day'] # small sample for dev
   thresholds <- c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5)
   
   prefix <- paste0(
@@ -31,7 +31,7 @@ for(row in 1:nrow(bin_design)){
     '_s', per_day
   )
   
-  ret <- simulate_binomial(
+  ret <- simulate_bernoulli(
     nreps = nreps,
     days = days,
     pB = 0.028,
@@ -40,16 +40,15 @@ for(row in 1:nrow(bin_design)){
     alpha = alpha,
     beta = beta)
   ret <- ret %>% 
-    mutate(expected_loss = do.call(vec_expected_loss_binomial, .)) %>%
+    mutate(expected_loss = do.call(vec_expected_loss_bernoulli, .)) %>%
     mutate(pval = do.call(vec_two_prop_pval, .))
   print("Simulation step done!")
   
-  bin_design <- evaluate_simulation(bin_design, row, ret, thresholds, prefix, cat='binomial')
+  ber_design <- evaluate_simulation(ber_design, row, ret, thresholds, prefix, cat='bernoulli')
   print("Evaluation step done!")
 }
 
 # Poisson (Count Data)
-pois_design <- design %>% filter(category == 'poisson')
 for(row in 1:nrow(pois_design)){
   effect <- pois_design[row,'effect']
   alpha <- pois_design[row, 'prior_alpha']
@@ -74,67 +73,60 @@ for(row in 1:nrow(pois_design)){
     beta = beta)
   ret <- ret %>% 
     mutate(expected_loss = do.call(vec_expected_loss_poisson, .)) %>%
-    mutate(pval = do.call(vec_two_t_pval, .))
+    mutate(pval = do.call(vec_two_t_pval_moves, .))
   print("Simulation step done!")
-
+  
   pois_design <- evaluate_simulation(pois_design, row, ret, thresholds, prefix, cat='poisson')
   print("Evaluation step done!")
 }
 
-final_design <- rbind(bin_design, pois_design)
-write.csv(final_design, "final_design.csv", row.names = FALSE) 
-
-final_design <- read.csv("final_design.csv", stringsAsFactors = FALSE)
-
-for(i in 1:nrow(final_design)){
-  if(final_design$category[i] == 'binomial' & final_design$prior_alpha[i] == 3 & final_design$prior_beta[i] == 100){
-    final_design$prior[i] = 'directional'
-  }
-  else if(final_design$category[i] == 'binomial' & final_design$prior_alpha[i] == 30 & final_design$prior_beta[i] == 1000){
-    final_design$prior[i] = 'confident'
-  }
-  else if(final_design$category[i] == 'binomial' & final_design$prior_alpha[i] == 30 & final_design$prior_beta[i] == 10){
-    final_design$prior[i] = 'wrong'
-  }
-  else if(final_design$category[i] == 'binomial' & final_design$prior_alpha[i] == 1 & final_design$prior_beta[i] == 1){
-    final_design$prior[i] = 'neutral'
-  }
-  else if(final_design$category[i] == 'poisson' & final_design$prior_alpha[i] == 23 & final_design$prior_beta[i] == 1){
-    final_design$prior[i] = 'directional'
-  }
-  else if(final_design$category[i] == 'poisson' & final_design$prior_alpha[i] == 230 & final_design$prior_beta[i] == 10){
-    final_design$prior[i] = 'confident'
-  }
-  else if(final_design$category[i] == 'poisson' & final_design$prior_alpha[i] == 6 & final_design$prior_beta[i] == 1){
-    final_design$prior[i] = 'wrong'
-  }
-  else{
-    final_design$prior[i] = 'others'
-  }
+# Bernoulli-Exponential (Continuous Data with Gating)
+for(row in 1:nrow(ber_exp_design)){
+  effect_p <- ber_exp_design[row,'effect_p']
+  effect_lambda <- ber_exp_design[row,'effect_lambda']
+  alpha1 <- ber_exp_design[row, 'prior_alpha1']
+  beta1 <- ber_exp_design[row, 'prior_beta1']
+  alpha2 <- ber_exp_design[row, 'prior_alpha2']
+  beta2 <- ber_exp_design[row, 'prior_beta2']
+  per_day <- ber_exp_design[row, 'sample_size_per_day'] # small sample for dev
+  thresholds <- c(0.1, 0.01, 0.001, 0.0001, 0.00001)
+  
+  prefix <- paste0(
+    '_ep', effect_p,
+    '_el', effect_lambda,
+    '_a1', alpha1,
+    '_b1', beta1,
+    '_a2', alpha2,
+    '_b2', beta2,
+    '_s', per_day
+  )
+  
+  ret <- simulate_bernoulli_exponential(
+    nreps,
+    days,
+    pB = 0.028,
+    lambdaB = 5,
+    effect_p, # A - B
+    effect_lambda, # A - B
+    per_day,
+    alpha1 = alpha1,
+    beta1 = beta1,
+    alpha2 = alpha2,
+    beta2 = beta2)
+  ret <- ret %>% 
+    mutate(expected_loss = do.call(vec_expected_loss_bernoulli_exponential, .)) %>%
+    mutate(pval = do.call(vec_two_t_pval_spend, .))
+  print("Simulation step done!")
+  
+  ber_exp_design <- evaluate_simulation(ber_exp_design, row, ret, thresholds, prefix, cat='bernoulli-exponential')
+  print("Evaluation step done!")
 }
 
-perc_as_num <- function(vec){
-  as.numeric(gsub("%", "", vec))
-}
+colnames(ber_design) <- gsub("1e-05", "0.00001", (gsub("1e-04", "0.0001", colnames(ber_design))))
+colnames(pois_design) <- gsub("1e-05", "0.00001", (gsub("1e-04", "0.0001", colnames(pois_design))))
+colnames(ber_exp_design) <- gsub("1e-05", "0.00001", (gsub("1e-04", "0.0001", colnames(ber_exp_design))))
 
-final_design <- final_design %>%
-  mutate(peek_multiplier_freq = round(perc_as_num(freq_treat_peek)/perc_as_num(freq_treat),1),
-         peek_multiplier_bayes_0.1 = round(perc_as_num(bayes_treat_peek_0.1)/perc_as_num(bayes_treat_0.1),1),
-         peek_multiplier_bayes_0.01 = round(perc_as_num(bayes_treat_peek_0.01)/perc_as_num(bayes_treat_0.01),1),
-         peek_multiplier_bayes_0.001 = round(perc_as_num(bayes_treat_peek_0.001)/perc_as_num(bayes_treat_0.001),1),
-         peek_multiplier_bayes_0.0001 = round(perc_as_num(bayes_treat_peek_1e.04)/perc_as_num(bayes_treat_1e.04),1),
-         peek_multiplier_bayes_0.00001 = round(perc_as_num(bayes_treat_peek_1e.05)/perc_as_num(bayes_treat_1e.05),1),
-         )
-final_design[final_design == 'NaN'] = NA
-final_design[final_design == 'Inf'] = NA
+write.csv(ber_design, "output/design_bernoulli.csv", row.names = FALSE) 
+write.csv(pois_design, "output/design_poisson.csv", row.names = FALSE) 
+write.csv(ber_exp_design, "output/design_bernoulli_exponential.csv", row.names = FALSE) 
 
-final_design <- final_design %>%
-  select(category, effect, prior_alpha, prior_beta, prior, sample_size_per_day,
-         freq_treat, freq_treat_peek, peek_multiplier_freq,
-         bayes_treat_0.1, bayes_treat_peek_0.1, peek_multiplier_bayes_0.1,
-         bayes_treat_0.01, bayes_treat_peek_0.01, peek_multiplier_bayes_0.01,
-         bayes_treat_0.001, bayes_treat_peek_0.001, peek_multiplier_bayes_0.001,
-         bayes_treat_1e.04, bayes_treat_peek_1e.04, peek_multiplier_bayes_0.0001,
-         bayes_treat_1e.05, bayes_treat_peek_1e.05, peek_multiplier_bayes_0.00001,
-         )
-write.csv(final_design, "final_design_master.csv", row.names = FALSE)

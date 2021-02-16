@@ -3,6 +3,8 @@ library(ggplot2)
 library(tidyverse)
 library(gridExtra)
 
+#TEST <- TRUE
+
 ## Prior Confidence
 grid.arrange(
   plotBeta(alpha = 3, beta = 100) + ggtitle("Directional-Beta (alpha=3, beta=100)"),
@@ -17,10 +19,21 @@ grid.arrange(
   nrow=1)
 
 ## Parameter Space
-category <- c('binomial')
-effect <- c(0, 0.001, 0.005)
-prior_confidence <- c('1,1', '3,100', '30,1000', '30,10')
-sample_size_per_day <- c(50, 500)
+
+### Bernoulli - test space
+if(TEST==TRUE){
+  category <- c('bernoulli')
+  effect <- c(0, 0.001)
+  prior_confidence <- c('1,1', '3,100')
+  sample_size_per_day <- c(500)
+} else {
+  category <- c('bernoulli')
+  effect <- c(0, 0.001, 0.005)
+  prior_confidence <- c('1,1', '3,100', '30,1000', '30,10')
+  sample_size_per_day <- c(500, 5000, 50000)
+}
+
+### Bernoulli - design grid
 design <- expand.grid(
   category=category,
   effect=effect,
@@ -28,14 +41,23 @@ design <- expand.grid(
   sample_size_per_day=sample_size_per_day, 
   stringsAsFactors = FALSE)
 prior_params <- as.data.frame(do.call('rbind', strsplit(as.character(design$prior_confidence),',',fixed=TRUE)))
-bin_design <- design %>% mutate(prior_alpha=prior_params$V1, prior_beta=prior_params$V2) %>% 
+ber_design <- design %>% mutate(prior_alpha=prior_params$V1, prior_beta=prior_params$V2) %>% 
   select(category, effect, prior_alpha, prior_beta, sample_size_per_day) %>% 
   arrange(category, effect, prior_alpha, prior_beta, sample_size_per_day)
+print(paste0("Nnumber of Benoulli simulations: ", nrow(ber_design)))
 
-category <- c('poisson')
-effect <- c(0, 0.01, 0.1)
-prior_confidence <- c('23,1', '230,10', '6,1')
-sample_size_per_day <- c(50, 500)
+if(TEST==TRUE){
+  category <- c('poisson')
+  effect <- c(0, 0.01, 0.1)
+  prior_confidence <- c('23,1')
+  sample_size_per_day <- c(500)
+} else {
+  category <- c('poisson')
+  effect <- c(0, 0.01, 0.1)
+  prior_confidence <- c('23,1', '230,10', '6,1')
+  sample_size_per_day <- c(500, 5000, 50000)
+}
+
 design <- expand.grid(
   category=category,
   effect=effect,
@@ -46,5 +68,39 @@ prior_params <- as.data.frame(do.call('rbind', strsplit(as.character(design$prio
 pois_design <- design %>% mutate(prior_alpha=prior_params$V1, prior_beta=prior_params$V2) %>% 
   select(category, effect, prior_alpha, prior_beta, sample_size_per_day) %>% 
   arrange(category, effect, prior_alpha, prior_beta, sample_size_per_day)
+print(paste0("Nnumber of Poisson simulations: ", nrow(pois_design)))
 
-design <- rbind(bin_design, pois_design)
+if(TEST==TRUE){
+  category <- c('bernoulli-exponential')
+  effect_p <- c(0)
+  effect_lambda <- c(0.1)
+  prior_confidence_p <- c('1,1', '3,100')
+  prior_confidence_lambda <- c('25,5')
+  sample_size_per_day <- c(500)
+} else {
+  category <- c('bernoulli-exponential')
+  effect_p <- c(0, 0.001)
+  effect_lambda <- c(0, 0.01)
+  prior_confidence_p <- c('1,1', '3,100', '30,1000', '30,10')
+  prior_confidence_lambda <- c('25,5', '250,50', '2,1')
+  sample_size_per_day <- c(50, 500)
+}
+
+design <- expand.grid(
+  category=category,
+  effect_p=effect_p,
+  effect_lambda=effect_lambda,
+  prior_confidence_p=prior_confidence_p, 
+  prior_confidence_lambda=prior_confidence_lambda,
+  sample_size_per_day=sample_size_per_day, 
+  stringsAsFactors = FALSE)
+prior_params_p <- as.data.frame(do.call('rbind', strsplit(as.character(design$prior_confidence_p),',',fixed=TRUE)))
+prior_params_lambda <- as.data.frame(do.call('rbind', strsplit(as.character(design$prior_confidence_lambda),',',fixed=TRUE)))
+ber_exp_design <- design %>% 
+  mutate(prior_alpha1=prior_params_p$V1,
+         prior_beta1=prior_params_p$V2,
+         prior_alpha2=prior_params_lambda$V1,
+         prior_beta2=prior_params_lambda$V2) %>% 
+  select(category, effect_p, effect_lambda, prior_alpha1, prior_beta1, prior_alpha2, prior_beta2, sample_size_per_day) %>% 
+  arrange(category, effect_p, effect_lambda, prior_alpha1, prior_beta1, prior_alpha2, prior_beta2, sample_size_per_day)
+print(paste0("Nnumber of Bernoulli-Exponential simulations: ", nrow(ber_exp_design)))

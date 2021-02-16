@@ -1,6 +1,6 @@
 # given ret from simulation
 
-evaluate_simulation <- function(design, row, ret, thresholds, prefix, cat='binomial', sig_thres=0.05){
+evaluate_simulation <- function(design, row, ret, thresholds, prefix, cat, sig_thres=0.05){
 
   # Evaluation
   last_pvalues <- ret %>%
