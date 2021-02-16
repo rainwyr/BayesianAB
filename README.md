@@ -6,8 +6,6 @@ Comparison of Bayesian A/B Testing to Frequentist A/B Testing on:
 * Effect of sample size
 * Effect of sample imbalance
 * Effect of prior parameter selection
-* Effect of prior distribution selection
-
 
 # Parameter Space
 
