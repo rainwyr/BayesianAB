@@ -83,7 +83,7 @@ if(TEST==TRUE){
   effect_lambda <- c(0, 0.01)
   prior_confidence_p <- c('1,1', '3,100', '30,1000', '30,10')
   prior_confidence_lambda <- c('25,5', '250,50', '2,1')
-  sample_size_per_day <- c(50, 500)
+  sample_size_per_day <- c(500, 5000, 50000)
 }
 
 design <- expand.grid(

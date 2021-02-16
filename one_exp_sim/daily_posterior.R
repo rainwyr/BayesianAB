@@ -147,7 +147,7 @@ posterior_bernoulli_exponential <- function(nA, nB, sA, sB,
   A_binom <- c(rep(1, sA), rep(0, nA - sA))[sampleA_idx]
   B_binom <- c(rep(1, sB), rep(0, nB - sB))[sampleB_idx]
   A_exp <- c(cumulative_spendA[[1]], rep(0, nA - sA))[sampleA_idx]
-  B_exp <- c(cumulative_spendB[[1]], rep(0, nA - sB))[sampleB_idx]
+  B_exp <- c(cumulative_spendB[[1]], rep(0, nB - sB))[sampleB_idx]
   
   test1 <- bayesTest(
     A_binom, 

@@ -37,8 +37,10 @@ ber_design <- ber_design %>%
 ber_design[ber_design == 'NaN'] = NA
 ber_design[ber_design == 'Inf'] = NA
 
+ber_design$case_id <- ifelse(ber_design$effect == 0, 1, 2)
+
 ber_design <- ber_design %>%
-  select(category, effect, sample_size_per_day,
+  select(case_id, category, effect, sample_size_per_day,
          prior_alpha, prior_beta, prior,
          freq_treat, freq_treat_peek, peek_multiplier_freq,
          bayes_treat_0.1, bayes_treat_peek_0.1, peek_multiplier_bayes_0.1,
@@ -47,7 +49,6 @@ ber_design <- ber_design %>%
          bayes_treat_0.0001, bayes_treat_peek_0.0001, peek_multiplier_bayes_0.0001,
          bayes_treat_0.00001, bayes_treat_peek_0.00001, peek_multiplier_bayes_0.00001,
   )
-
 
 
 # Poisson
@@ -78,8 +79,10 @@ pois_design <- pois_design %>%
 pois_design[pois_design == 'NaN'] = NA
 pois_design[pois_design == 'Inf'] = NA
 
+pois_design$case_id <- ifelse(pois_design$effect == 0, 3, 4)
+
 pois_design <- pois_design %>%
-  select(category, effect, sample_size_per_day,
+  select(case_id, category, effect, sample_size_per_day,
          prior_alpha, prior_beta, prior,
          freq_treat, freq_treat_peek, peek_multiplier_freq,
          bayes_treat_0.1, bayes_treat_peek_0.1, peek_multiplier_bayes_0.1,
@@ -135,8 +138,10 @@ ber_exp_design <- ber_exp_design %>%
 ber_exp_design[ber_exp_design == 'NaN'] = NA
 ber_exp_design[ber_exp_design == 'Inf'] = NA
 
+ber_exp_design$case_id <- ifelse((ber_exp_design$effect_p == 0) & (ber_exp_design$effect_lambda == 0), 5, 6)
+
 ber_exp_design <- ber_exp_design %>%
-  select(category, effect_p, effect_lambda, sample_size_per_day,
+  select(case_id, category, effect_p, effect_lambda, sample_size_per_day,
          prior_alpha1, prior_beta1, prior_alpha2, prior_beta2, prior1, prior2, 
          freq_treat, freq_treat_peek, peek_multiplier_freq,
          bayes_treat_0.1, bayes_treat_peek_0.1, peek_multiplier_bayes_0.1,

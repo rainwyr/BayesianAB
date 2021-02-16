@@ -1,0 +1,4 @@
+"category","effect","prior_alpha","prior_beta","sample_size_per_day","freq_treat","freq_treat_peek","bayes_treat_0.1","bayes_treat_peek_0.1","bayes_treat_0.01","bayes_treat_peek_0.01","bayes_treat_0.001","bayes_treat_peek_0.001","bayes_treat_0.0001","bayes_treat_peek_0.0001","bayes_treat_0.00001","bayes_treat_peek_0.00001"
+"poisson",0,"23","1",500,"10%","10%","100%","100%","100%","100%","50%","50%","10%","10%","10%","10%"
+"poisson",0.01,"23","1",500,"0%","0%","100%","100%","100%","100%","20%","30%","10%","10%","0%","0%"
+"poisson",0.1,"23","1",500,"0%","10%","100%","100%","100%","100%","20%","60%","0%","10%","0%","0%"

@@ -1,0 +1,3 @@
+"category","effect_p","effect_lambda","prior_alpha1","prior_beta1","prior_alpha2","prior_beta2","sample_size_per_day","freq_treat","freq_treat_peek","bayes_treat_0.1","bayes_treat_peek_0.1","bayes_treat_0.01","bayes_treat_peek_0.01","bayes_treat_0.001","bayes_treat_peek_0.001","bayes_treat_0.0001","bayes_treat_peek_0.0001","bayes_treat_0.00001","bayes_treat_peek_0.00001"
+"bernoulli-exponential",0,0.1,"1","1","25","5",500,"0%","0%","100%","100%","0%","0%","0%","0%","0%","0%","0%","0%"
+"bernoulli-exponential",0,0.1,"3","100","25","5",500,"40%","40%","90%","100%","0%","20%","0%","0%","0%","0%","0%","0%"

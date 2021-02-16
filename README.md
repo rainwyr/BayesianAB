@@ -10,7 +10,7 @@ Comparison of Bayesian A/B Testing to Frequentist A/B Testing on:
 # Parameter Space
 
 
-* nreps: 1000
+* nreps: 500
 * days (of experiment): 30
 * Parameter Selection: [Directional, Confident, Wrong, (Neutral)]
 * sample_size_per_day: [50, 500, 5000, 50000]
@@ -21,12 +21,12 @@ Comparison of Bayesian A/B Testing to Frequentist A/B Testing on:
 
 | Case ID | Application      | Distribution          | Effect  |
 | ------- | ---------------- | --------------------- | ------- |
-| 1       | Payer Conversion | Bernoulli             | True    |
-| 2       | Payer Conversion | Bernoulli             | False   |
-| 3       | Total Moves      | Poisson               | True    |
-| 4       | Total Moves      | Poisson               | False   |
-| 5       | Revenue          | Bernoulli-Exponential | True    |
-| 6       | Revenue          | Bernoulli-Exponential | False   |
+| 1       | Payer Conversion | Bernoulli             | False   |
+| 2       | Payer Conversion | Bernoulli             | True    |
+| 3       | Total Moves      | Poisson               | False   |
+| 4       | Total Moves      | Poisson               | True    |
+| 5       | Revenue          | Bernoulli-Exponential | False   |
+| 6       | Revenue          | Bernoulli-Exponential | True    |
 
 
 | Case ID | Peeking | Sample Size | Sample Imbalance | Parameter Selection |

@@ -1,0 +1,5 @@
+"case_id","category","effect","sample_size_per_day","prior_alpha","prior_beta","prior","freq_treat","freq_treat_peek","peek_multiplier_freq","bayes_treat_0.1","bayes_treat_peek_0.1","peek_multiplier_bayes_0.1","bayes_treat_0.01","bayes_treat_peek_0.01","peek_multiplier_bayes_0.01","bayes_treat_0.001","bayes_treat_peek_0.001","peek_multiplier_bayes_0.001","bayes_treat_0.0001","bayes_treat_peek_0.0001","peek_multiplier_bayes_0.0001","bayes_treat_0.00001","bayes_treat_peek_0.00001","peek_multiplier_bayes_0.00001"
+1,"bernoulli",0,500,1,1,"neutral","0%","10%",NA,"60%","60%",1,"10%","20%",2,"0%","0%",NA,"0%","0%",NA,"0%","0%",NA
+1,"bernoulli",0,500,3,100,"directional","0%","0%",NA,"40%","70%",1.8,"10%","30%",3,"0%","0%",NA,"0%","0%",NA,"0%","0%",NA
+2,"bernoulli",0.001,500,1,1,"neutral","10%","10%",1,"70%","80%",1.1,"0%","30%",NA,"0%","0%",NA,"0%","0%",NA,"0%","0%",NA
+2,"bernoulli",0.001,500,3,100,"directional","10%","10%",1,"40%","60%",1.5,"10%","10%",1,"10%","10%",1,"0%","0%",NA,"0%","0%",NA
