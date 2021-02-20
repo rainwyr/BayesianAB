@@ -39,27 +39,27 @@ Comparison of Bayesian A/B Testing to Frequentist A/B Testing on:
 
 ### Case 1
 
-![Case 1 GIF](one_exp_sim/demo_case1.gif)
+![Case 1 GIF](one_exp_sim/demo_case1.gif =100x100)
 
 ### Case 2
 
-![Case 2 GIF](one_exp_sim/demo_case2.gif)
+![Case 2 GIF](one_exp_sim/demo_case2.gif =100x100)
 
 ### Case 3
 
-![Case 3 GIF](one_exp_sim/demo_case3.gif)
+![Case 3 GIF](one_exp_sim/demo_case3.gif =100x100)
 
 ### Case 4
 
-![Case 4 GIF](one_exp_sim/demo_case4.gif)
+![Case 4 GIF](one_exp_sim/demo_case4.gif =100x100)
 
 ### Case 5
 
-![Case 5 GIF](one_exp_sim/demo_case5.gif)
+![Case 5 GIF](one_exp_sim/demo_case5.gif =100x100)
 
 ### Case 6
 
-![Case 6 GIF](one_exp_sim/demo_case6.gif)
+![Case 6 GIF](one_exp_sim/demo_case6.gif =100x100)
 
 
 # Conclusions
