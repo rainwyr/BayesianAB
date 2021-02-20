@@ -4,6 +4,18 @@ library(tidyverse)
 library(gridExtra)
 
 #TEST <- TRUE
+if(TEST==TRUE){
+  sig_thres <- 0.05
+  nreps <- 10
+  days <- 7
+} else {
+  sig_thres <- 0.05
+  nreps <- 500
+  days <- 30
+}
+print(paste0("Frequentist Sig Level: ", sig_thres))
+print(paste0("Number of Replicates: ", nreps))
+print(paste0("Duration of Experiments (days): ", days))
 
 ## Prior Confidence
 grid.arrange(
@@ -44,7 +56,7 @@ prior_params <- as.data.frame(do.call('rbind', strsplit(as.character(design$prio
 ber_design <- design %>% mutate(prior_alpha=prior_params$V1, prior_beta=prior_params$V2) %>% 
   select(category, effect, prior_alpha, prior_beta, sample_size_per_day) %>% 
   arrange(category, effect, prior_alpha, prior_beta, sample_size_per_day)
-print(paste0("Nnumber of Benoulli simulations: ", nrow(ber_design)))
+print(paste0("Number of Benoulli simulations: ", nrow(ber_design)))
 
 if(TEST==TRUE){
   category <- c('poisson')
@@ -68,7 +80,7 @@ prior_params <- as.data.frame(do.call('rbind', strsplit(as.character(design$prio
 pois_design <- design %>% mutate(prior_alpha=prior_params$V1, prior_beta=prior_params$V2) %>% 
   select(category, effect, prior_alpha, prior_beta, sample_size_per_day) %>% 
   arrange(category, effect, prior_alpha, prior_beta, sample_size_per_day)
-print(paste0("Nnumber of Poisson simulations: ", nrow(pois_design)))
+print(paste0("Number of Poisson simulations: ", nrow(pois_design)))
 
 if(TEST==TRUE){
   category <- c('bernoulli-exponential')
@@ -81,9 +93,9 @@ if(TEST==TRUE){
   category <- c('bernoulli-exponential')
   effect_p <- c(0, 0.001)
   effect_lambda <- c(0, 0.01)
-  prior_confidence_p <- c('1,1', '3,100', '30,1000', '30,10')
-  prior_confidence_lambda <- c('25,5', '250,50', '2,1')
-  sample_size_per_day <- c(500, 5000, 50000)
+  prior_confidence_p <- c('3,100', '30,10')
+  prior_confidence_lambda <- c('25,5', '2,1')
+  sample_size_per_day <- c(500, 5000)
 }
 
 design <- expand.grid(
@@ -103,4 +115,4 @@ ber_exp_design <- design %>%
          prior_beta2=prior_params_lambda$V2) %>% 
   select(category, effect_p, effect_lambda, prior_alpha1, prior_beta1, prior_alpha2, prior_beta2, sample_size_per_day) %>% 
   arrange(category, effect_p, effect_lambda, prior_alpha1, prior_beta1, prior_alpha2, prior_beta2, sample_size_per_day)
-print(paste0("Nnumber of Bernoulli-Exponential simulations: ", nrow(ber_exp_design)))
+print(paste0("Number of Bernoulli-Exponential simulations: ", nrow(ber_exp_design)))

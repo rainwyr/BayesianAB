@@ -130,6 +130,10 @@ AB22 <- bayesTest(
   priors = c('shape' = 5, 'rate' = 1), 
   n_samples = 1e5, 
   distribution = 'exponential')
+rm("A_binom")
+rm("B_binom")
+rm("A_exp")
+rm("B_exp")
 
 AB3 <- bayesAB::combine(AB11, AB22, f = `*`, params = c('Probability', 'Lambda'), newName = 'Expectation')
 s3 = summary(AB3, percentLift = percLift)

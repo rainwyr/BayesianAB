@@ -119,10 +119,8 @@ simulate_bernoulli_exponential <- function(days,
     tidyr::unite(metric2, metric, type, sep = "") %>%
     tidyr::spread(metric2, value) %>%
     mutate(alpha1 = alpha1, beta1 = beta1) %>% 
-    mutate(spendA = map(sA, rexp, rate = 1/lambdaA)) %>%
-    mutate(spendB = map(sB, rexp, rate = 1/lambdaB)) %>%
-    mutate(cumulative_spendA = cumconcat(spendA)) %>%
-    mutate(cumulative_spendB = cumconcat(spendB)) %>%
+    mutate(cumulative_spendA = map(sA, rexp, rate = 1/lambdaA)) %>%
+    mutate(cumulative_spendB = map(sB, rexp, rate = 1/lambdaB)) %>%
     mutate(alpha2 = alpha2, beta2 = beta2)
 }
 vec_posterior_bernoulli_exponential <- function(nA, nB, sA, sB, 

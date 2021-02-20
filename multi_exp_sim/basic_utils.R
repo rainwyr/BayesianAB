@@ -150,10 +150,8 @@ simulate_bernoulli_exponential <- function(nreps,
     tidyr::unite(metric2, metric, type, sep = "") %>%
     tidyr::spread(metric2, value) %>%
     mutate(alpha1 = alpha1, beta1 = beta1) %>% 
-    mutate(spendA = map(sA, rexp, rate = 1/lambdaA)) %>%
-    mutate(spendB = map(sB, rexp, rate = 1/lambdaB)) %>%
-    mutate(cumulative_spendA = cumconcat(spendA)) %>%
-    mutate(cumulative_spendB = cumconcat(spendB)) %>%
+    mutate(cumulative_spendA = map(sA, rexp, rate = 1/lambdaA)) %>%
+    mutate(cumulative_spendB = map(sB, rexp, rate = 1/lambdaB)) %>%
     mutate(alpha2 = alpha2, beta2 = beta2)
 }
 
@@ -185,6 +183,9 @@ expected_loss_bernoulli_exponential <- function(nA, nB, sA, sB,
     n_samples = 1e5, 
     distribution = 'bernoulli')
   
+  rm("A_binom")
+  rm("B_binom")
+  
   test2 <- bayesTest(
     A_exp, 
     B_exp, 
@@ -192,7 +193,13 @@ expected_loss_bernoulli_exponential <- function(nA, nB, sA, sB,
     n_samples = 1e5, 
     distribution = 'exponential')
   
+  rm("A_exp")
+  rm("B_exp")
+  
   ber_exp_test <- bayesAB::combine(test1, test2, f = `*`, params = c('Probability', 'Lambda'), newName = 'Expectation')
+  
+  rm("test1")
+  rm("test2")
   
   percLift = 0
   test_result = summary(ber_exp_test, percentLift = percLift)
@@ -206,6 +213,9 @@ vec_two_t_pval_spend <- function(cumulative_spendA, cumulative_spendB, ...) {
 }
 
 two_t_pval_spend <- function(cumulative_spendA, cumulative_spendB, ...){
+  if((len(cumulative_spendA) < 5)|(len(cumulative_spendB) < 5)){
+    return(NA)
+  }
   x <- cumulative_spendA[[1]]
   y <- cumulative_spendB[[1]]
   return(t.test(x, y)$p.value)

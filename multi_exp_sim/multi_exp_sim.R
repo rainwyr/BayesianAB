@@ -8,77 +8,82 @@ library(broom)
 library(purrr)
 source("basic_utils.R")
 source("batch_utils.R")
-TEST <- TRUE
+TEST <- FALSE
 source("parameter_space.R")
 format_percent <- function(x, digits = 2) paste0(round(100 * x, digits), "%")
-sig_thres <- 0.05
-nreps <- 10
-days <- 7
 
 # Bernoulli (Proportion)
 
-for(row in 1:nrow(ber_design)){
-  effect <- ber_design[row,'effect']
-  alpha <- ber_design[row, 'prior_alpha']
-  beta <- ber_design[row, 'prior_beta']
-  per_day <- ber_design[row, 'sample_size_per_day'] # small sample for dev
-  thresholds <- c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5)
-  
-  prefix <- paste0(
-    '_e', effect,
-    '_a', alpha,
-    '_b', beta,
-    '_s', per_day
-  )
-  
-  ret <- simulate_bernoulli(
-    nreps = nreps,
-    days = days,
-    pB = 0.028,
-    effect = effect,
-    per_day = per_day,
-    alpha = alpha,
-    beta = beta)
-  ret <- ret %>% 
-    mutate(expected_loss = do.call(vec_expected_loss_bernoulli, .)) %>%
-    mutate(pval = do.call(vec_two_prop_pval, .))
-  print("Simulation step done!")
-  
-  ber_design <- evaluate_simulation(ber_design, row, ret, thresholds, prefix, cat='bernoulli')
-  print("Evaluation step done!")
-}
+# for(row in 1:nrow(ber_design)){
+#   effect <- ber_design[row,'effect']
+#   alpha <- ber_design[row, 'prior_alpha']
+#   beta <- ber_design[row, 'prior_beta']
+#   per_day <- ber_design[row, 'sample_size_per_day'] # small sample for dev
+#   thresholds <- c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5)
+#   
+#   prefix <- paste0(
+#     '_e', effect,
+#     '_a', alpha,
+#     '_b', beta,
+#     '_s', per_day
+#   )
+#   
+#   ret <- simulate_bernoulli(
+#     nreps = nreps,
+#     days = days,
+#     pB = 0.028,
+#     effect = effect,
+#     per_day = per_day,
+#     alpha = alpha,
+#     beta = beta)
+#   ret <- ret %>% 
+#     mutate(expected_loss = do.call(vec_expected_loss_bernoulli, .)) %>%
+#     mutate(pval = do.call(vec_two_prop_pval, .))
+#   print("Simulation step done!")
+#   
+#   ber_design <- evaluate_simulation(ber_design, row, ret, thresholds, prefix, cat='bernoulli')
+#   print("Evaluation step done!")
+# }
+# colnames(ber_design) <- gsub("1e-05", "0.00001", (gsub("1e-04", "0.0001", colnames(ber_design))))
+# write.csv(ber_design, "output/design_bernoulli.csv", row.names = FALSE) 
+
+# rm("ret")
 
 # Poisson (Count Data)
-for(row in 1:nrow(pois_design)){
-  effect <- pois_design[row,'effect']
-  alpha <- pois_design[row, 'prior_alpha']
-  beta <- pois_design[row, 'prior_beta']
-  per_day <- pois_design[row, 'sample_size_per_day'] # small sample for dev
-  thresholds <- c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5)
-  
-  prefix <- paste0(
-    '_e', effect,
-    '_a', alpha,
-    '_b', beta,
-    '_s', per_day
-  )
-  
-  ret <- simulate_poisson(
-    nreps = nreps,
-    days = days,
-    lambdaB = 23, 
-    effect = effect, 
-    per_day = per_day,
-    alpha = alpha,
-    beta = beta)
-  ret <- ret %>% 
-    mutate(expected_loss = do.call(vec_expected_loss_poisson, .)) %>%
-    mutate(pval = do.call(vec_two_t_pval_moves, .))
-  print("Simulation step done!")
-  
-  pois_design <- evaluate_simulation(pois_design, row, ret, thresholds, prefix, cat='poisson')
-  print("Evaluation step done!")
-}
+# for(row in 1:nrow(pois_design)){
+#   effect <- pois_design[row,'effect']
+#   alpha <- pois_design[row, 'prior_alpha']
+#   beta <- pois_design[row, 'prior_beta']
+#   per_day <- pois_design[row, 'sample_size_per_day'] # small sample for dev
+#   thresholds <- c(1e-1, 1e-2, 1e-3, 1e-4, 1e-5)
+#   
+#   prefix <- paste0(
+#     '_e', effect,
+#     '_a', alpha,
+#     '_b', beta,
+#     '_s', per_day
+#   )
+#   
+#   ret <- simulate_poisson(
+#     nreps = nreps,
+#     days = days,
+#     lambdaB = 23, 
+#     effect = effect, 
+#     per_day = per_day,
+#     alpha = alpha,
+#     beta = beta)
+#   ret <- ret %>% 
+#     mutate(expected_loss = do.call(vec_expected_loss_poisson, .)) %>%
+#     mutate(pval = do.call(vec_two_t_pval_moves, .))
+#   print("Simulation step done!")
+#   
+#   pois_design <- evaluate_simulation(pois_design, row, ret, thresholds, prefix, cat='poisson')
+#   print("Evaluation step done!")
+# }
+# 
+# colnames(pois_design) <- gsub("1e-05", "0.00001", (gsub("1e-04", "0.0001", colnames(pois_design))))
+# write.csv(pois_design, "output/design_poisson.csv", row.names = FALSE) 
+
 
 # Bernoulli-Exponential (Continuous Data with Gating)
 for(row in 1:nrow(ber_exp_design)){
@@ -102,7 +107,7 @@ for(row in 1:nrow(ber_exp_design)){
   )
   
   ret <- simulate_bernoulli_exponential(
-    nreps,
+    nreps=100,
     days,
     pB = 0.028,
     lambdaB = 5,
@@ -122,11 +127,5 @@ for(row in 1:nrow(ber_exp_design)){
   print("Evaluation step done!")
 }
 
-colnames(ber_design) <- gsub("1e-05", "0.00001", (gsub("1e-04", "0.0001", colnames(ber_design))))
-colnames(pois_design) <- gsub("1e-05", "0.00001", (gsub("1e-04", "0.0001", colnames(pois_design))))
 colnames(ber_exp_design) <- gsub("1e-05", "0.00001", (gsub("1e-04", "0.0001", colnames(ber_exp_design))))
-
-write.csv(ber_design, "output/design_bernoulli.csv", row.names = FALSE) 
-write.csv(pois_design, "output/design_poisson.csv", row.names = FALSE) 
 write.csv(ber_exp_design, "output/design_bernoulli_exponential.csv", row.names = FALSE) 
-
