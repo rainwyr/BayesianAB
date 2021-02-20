@@ -16,6 +16,8 @@ Comparison of Bayesian A/B Testing to Frequentist A/B Testing on:
 
 # Summary
 
+In real applications, Bernoulli is a good distribution for payer conversion, Poisson is a good distribution for count data, (e.g. how many moves a user makes in mobile game) and Bernoulli-Exponential is a good distribution for revenue data (once a user becomes a payer it's reasonable to assume the spend is right skewed). 
+
 | Case ID | Application      | Distribution          | Effect  |
 | ------- | ---------------- | --------------------- | ------- |
 | 1       | Payer Conversion | Bernoulli             | False   |
@@ -28,12 +30,12 @@ Comparison of Bayesian A/B Testing to Frequentist A/B Testing on:
 
 | Case ID | Peeking | Sample Size | Parameter Selection |
 | ------- | ------------------------------------------------- | ----------------- | ------------------- |
-| 1       | suffer but not as badly as frequentist  	 | Sensitive   | Insensitive         |
-| 2       | suffer but not as badly as frequentist      | Sensitive     | Insensitive         |
-| 3       | suffer but not as badly as frequentist      | Sensitive     | Insensitive         |
-| 4       | suffer but not as badly as frequentist      | Sensitive      | Insensitive         |
-| 5       | suffer but not as badly as frequentist      | Sensitive      | Insensitive         |
-| 6       | suffer but not as badly as frequentist      | Sensitive    | Insensitive         |
+| 1       | Suffer but not as badly as frequentist  	 | Sensitive   | Insensitive         |
+| 2       | Suffer but not as badly as frequentist      | Sensitive     | Insensitive         |
+| 3       | Suffer but not as badly as frequentist      | Sensitive     | Insensitive         |
+| 4       | Suffer but not as badly as frequentist      | Sensitive      | Insensitive         |
+| 5       | Suffer but not as badly as frequentist      | Sensitive      | Insensitive         |
+| 6       | Suffer but not as badly as frequentist      | Sensitive    | Insensitive         |
 
 # Details
 
