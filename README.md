@@ -16,7 +16,7 @@ Comparison of Bayesian A/B Testing to Frequentist A/B Testing on:
 
 # Summary
 
-In real applications, Bernoulli is a good distribution for payer conversion, Poisson is a good distribution for count data, (e.g. how many moves a user makes in mobile game) and Bernoulli-Exponential is a good distribution for revenue data (once a user becomes a payer it's reasonable to assume the spend is right skewed). 
+In real applications, Bernoulli is a good distribution for payer conversion, Poisson is a good distribution for count data (e.g. how many moves a user makes in mobile game) and Bernoulli-Exponential is a good distribution for revenue data (a proportion of users become payers and then it's reasonable to assume the spend is right skewed). 
 
 | Case ID | Application      | Distribution          | Effect  |
 | ------- | ---------------- | --------------------- | ------- |
