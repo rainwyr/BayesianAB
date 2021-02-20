@@ -1,0 +1,182 @@
+---
+title: "Analysis"
+author: "Rain"
+date: "2/19/2021"
+output: pdf_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, message=FALSE}
+library(knitr)
+source("analysis.R")
+```
+
+# Overview
+
+### False/True Positive Rate
+
+All the percentages in the following tables are proportion of the simulated experiments that led to the conclusion that the treatment is chosen. 
+
+In Case 1, 3, and 5 where the underlying treatment and control have no difference, the percentages mean false positive rates. Therefore, the lower the percentage, the better.
+
+In Case 2, 4, and 6 where the treatment is better than control, the percentages mean true positive rates. Therefore, the higher the percentage, the better.
+
+### Threshold of Caring
+
+Threshold of caring indicates what level of expected loss you are willing to take by choosing treatment when it's actually not better than control. 
+
+A high threshold means you are very willing to choose treatment.
+
+A low threshold means you are very conservative and would only choose treatmet if it's obviously better than control.
+
+Threshold of caring differs from problem to problem. We choose the threshold in each case based on which one is the most comparable to the frequentist test of alpha = 0.05.
+
+In real application, we propose using simulations in this analysis to determine the best threshold, so that it's not abused by bad estimations.
+
+### Areas of Analysis
+
+1. Effect of peeking. We calculate peek_multiplier - how many times more likely we would choose treatment if monitor daily and stop the experiment earlier when we see a result that's positive enough. Note that only sample size of 500 is used because when the sample size is large enough, % of accepting treatment goes to 100% very quickly and would skew the peek_multiplier.
+
+2. Effect of sample size. We compare average false/true positive rate by different sample sizes.
+
+3. Effect of prior parameter selections. We compare average false/true positive rate by directional, confident, and wrong priors.
+
+# Case 1
+
+Threshold = 0.001.
+
+Bayesian suffers from peeking as well but not as badly as Frequentist.
+
+```{r}
+case_df <- get_relevant_data(1)
+kable(analyze_peeking(case_df))
+```
+
+Bayesian's false positive rate quickly increases with increasing sample size.
+
+```{r}
+kable(analyze_sample_size(case_df))
+```
+
+Bayesian's prior parameters do not matter much for the sample sizes we have.
+
+```{r}
+kable(analyze_prior(case_df))
+```
+
+# Case 2
+
+Threshold = 0.001.
+
+Bayesian suffers from peeking as well but not as badly as Frequentist.
+
+```{r}
+case_df <- get_relevant_data(2)
+kable(analyze_peeking(case_df))
+```
+
+Bayesian's true positive rate quickly increases with increasing sample size.
+
+```{r}
+kable(analyze_sample_size(case_df))
+```
+
+Bayesian's prior parameters do not matter much for the sample sizes we have.
+
+```{r}
+kable(analyze_prior(case_df))
+```
+
+# Case 3
+
+Threshold = 0.00001.
+
+Bayesian suffers from peeking as well but not as badly as Frequentist.
+
+```{r}
+case_df <- get_relevant_data(3)
+kable(analyze_peeking(case_df))
+```
+
+Bayesian's false positive rate quickly increases with increasing sample size.
+
+```{r}
+kable(analyze_sample_size(case_df))
+```
+
+Bayesian's prior parameters do not matter much for the sample sizes we have.
+
+```{r}
+kable(analyze_prior(case_df))
+```
+
+# Case 4
+
+Threshold = 0.00001.
+
+Bayesian suffers from peeking as well but not as badly as Frequentist.
+
+```{r}
+case_df <- get_relevant_data(4)
+kable(analyze_peeking(case_df))
+```
+
+Bayesian's true positive rate quickly increases with increasing sample size.
+
+```{r}
+kable(analyze_sample_size(case_df))
+```
+
+Bayesian's prior parameters do not matter much for the sample sizes we have.
+
+```{r}
+kable(analyze_prior(case_df))
+```
+
+# Case 5
+
+Threshold = 0.001.
+
+Bayesian suffers from peeking as well but not as badly as Frequentist.
+
+```{r}
+case_df <- get_relevant_data(5)
+kable(analyze_peeking(case_df))
+```
+
+Bayesian's false positive rate quickly increases with increasing sample size.
+
+```{r}
+kable(analyze_sample_size(case_df))
+```
+
+Bayesian's prior parameters do not matter much for the sample sizes we have.
+
+```{r}
+kable(analyze_prior(case_df))
+```
+
+# Case 6
+
+Threshold = 0.001.
+
+Bayesian suffers from peeking as well but not as badly as Frequentist.
+
+```{r}
+case_df <- get_relevant_data(6)
+kable(analyze_peeking(case_df))
+```
+
+Bayesian's true positive rate quickly increases with increasing sample size.
+
+```{r}
+kable(analyze_sample_size(case_df))
+```
+
+Bayesian's prior parameters do not matter much for the sample sizes we have.
+
+```{r}
+kable(analyze_prior(case_df))
+```
