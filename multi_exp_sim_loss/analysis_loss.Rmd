@@ -1,7 +1,7 @@
 ---
-title: "Analysis"
+title: "Expected Loss Based Analysis"
 author: "Rain"
-date: "2/19/2021"
+date: "5/27/2021"
 output: pdf_document
 ---
 ```{r setup, include=FALSE}
@@ -12,6 +12,19 @@ knitr::opts_chunk$set(echo = FALSE)
 library(knitr)
 source("analysis.R")
 ```
+
+This analysis is based on Bayesian result according to expected loss < threshold of caring. Threshold of caring is different from probblem to problem.
+
+Recall that
+
+| Case ID | Application      | Distribution          | Effect  | Theshold of Caring |
+| ------- | ---------------- | --------------------- | ------- | ------------------ |
+| 1       | Payer Conversion | Bernoulli             | False   | 0.001              |
+| 2       | Payer Conversion | Bernoulli             | True    | 0.001              |
+| 3       | Total Moves      | Poisson               | False   | 0.00001            |
+| 4       | Total Moves      | Poisson               | True    | 0.00001            |
+| 5       | Revenue          | Bernoulli-Exponential | False   | 0.001              |
+| 6       | Revenue          | Bernoulli-Exponential | True    | 0.001              |
 
 # False/True Positive Rate
 
@@ -55,6 +68,7 @@ case_df <- rbind(cbind(case = 2, analyze_sample_size(get_relevant_data(2))),
                  cbind(case = 6, analyze_sample_size(get_relevant_data(6))))
               
 kable(case_df)
+#kable(case_df %>% select(case, sample_size_per_day, freq_power=avg_freq_treat, bayes_power=avg_bayes_treat))
 ```
 
 ## 3. Effect of prior parameter selections
