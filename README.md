@@ -4,17 +4,17 @@ Comparison of Bayesian A/B Testing to Frequentist A/B Testing on:
 
 * Effect of peeking
 * Effect of sample size
-* Effect of sample imbalance
 * Effect of prior parameter selection
 
 # Parameter Space
 
-
-* nreps: 500
-* days (of experiment): 30
+* nreps: [500]
+* days (of experiment): [30]
 * Parameter Selection: [Directional, Confident, Wrong, (Neutral)]
 * sample_size_per_day: [50, 500, 5000, 50000]
-* threshold (of caring): [0.1, 0.01, 0.001, 0.0001, 0.00001]
+* threshold
+  * expected loss: [0.1, 0.01, 0.001, 0.0001, 0.00001]
+  * P(A>B): [0.95]
 
 
 # Summary
@@ -29,17 +29,18 @@ Comparison of Bayesian A/B Testing to Frequentist A/B Testing on:
 | 6       | Revenue          | Bernoulli-Exponential | True    |
 
 
-| Case ID | Peeking | Sample Size | Sample Imbalance | Parameter Selection |
-| ------- | ------- | ----------- | ---------------- | ------------------- |
-| 1       | X%      | Sensitive   | Sensitive        | Insensitive         |
-| 2       | X%      | Sensitive   | Sensitive        | Insensitive         |
-| 3       | X%      | Sensitive   | Sensitive        | Insensitive         |
-| 4       | X%      | Sensitive   | Sensitive        | Insensitive         |
-| 5       | X%      | Sensitive   | Sensitive        | Insensitive         |
-| 6       | X%      | Sensitive   | Sensitive        | Insensitive         |
+| Case ID | Peeking         | Sample Size | Parameter Selection |
+| ------- | --------------- | ----------- | ------------------- |
+| 1       | Not Immune      | Sensitive   | Insensitive         |
+| 2       | Not Immune      | Sensitive   | Insensitive         |
+| 3       | Not Immune      | Sensitive   | Insensitive         |
+| 4       | Not Immune      | Sensitive   | Insensitive         |
+| 5       | Not Immune      | Sensitive   | Insensitive         |
+| 6       | Not Immune      | Sensitive   | Insensitive         |
 
 
 # Conclusions
 
-* Bayesian A/B testing can be used to speed up experimentation not by shortening the duration but by requiring much less samples to achieve a comparable performance as Frequentist A/B testing framework.
-* Threshold of caring differs from problem to problem but could leverage some simulation for best choices.
+* Bayesian A/B Testing is not immune to peeking, with slightly less risk.
+* Bayesian A/B Testing has very similar performance to Frequentist when we make decision based on P(A>B) > 95%, with slightly more power.
+* Bayesian A/B Testing result is barely affected by the prior selection with the sample size we have.
