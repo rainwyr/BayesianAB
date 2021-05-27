@@ -1,0 +1,68 @@
+---
+title: "Analysis"
+author: "Rain"
+date: "2/19/2021"
+output: pdf_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, message=FALSE}
+library(knitr)
+source("analysis2.R")
+```
+
+# False/True Positive Rate
+
+All the percentages in the following tables are proportion of the simulated experiments that led to the conclusion that the treatment is chosen. 
+
+In Case 1 and 3 where the underlying treatment and control have no difference, the percentages mean false positive rates. Therefore, the lower the percentage, the better.
+
+In Case 2 and 4 where the treatment is better than control, the percentages mean true positive rates. Therefore, the higher the percentage, the better.
+
+# Areas of Analysis
+
+## 1. Effect of peeking
+
+We calculate peek_multiplier - how many times more likely we would choose treatment if monitor daily and stop the experiment earlier when we see a result that's positive enough. Note that only sample size of 500 is used because when the sample size is large enough, % of accepting treatment goes to 100% very quickly and would skew the peek_multiplier.
+
+Result: Bayesian suffers from peeking as well.
+
+```{r}
+case_df <- rbind(cbind(case = 1, analyze_peeking(get_relevant_data(1))),
+            cbind(case = 3, analyze_peeking(get_relevant_data(3))))
+kable(case_df)
+```
+
+## 2. Effect of sample size
+
+Conclusion: When treatment is not better than control, the false positive rate is controled at 5%.
+
+```{r}
+case_df <- rbind(cbind(case = 1, analyze_sample_size(get_relevant_data(1))),
+                 cbind(case = 3, analyze_sample_size(get_relevant_data(3))))
+kable(case_df)
+```
+
+Conclusion: When treatment is better than control, Bayesian has slightly more power.
+
+```{r}
+case_df <- rbind(cbind(case = 2, analyze_sample_size(get_relevant_data(2))),
+                 cbind(case = 4, analyze_sample_size(get_relevant_data(4))))
+kable(case_df)
+```
+
+## 3. Effect of prior parameter selections
+
+We compare average false/true positive rate by directional, confident, and wrong priors.
+
+Conclusio: Bayesian's prior parameters do not matter much for the sample sizes we have.
+
+```{r}
+case_df <- rbind(cbind(case = 1, analyze_prior(get_relevant_data(1))),
+                 cbind(case = 2, analyze_prior(get_relevant_data(2))),
+                 cbind(case = 3, analyze_prior(get_relevant_data(3))),
+                 cbind(case = 4, analyze_prior(get_relevant_data(4))))
+kable(case_df)
+```

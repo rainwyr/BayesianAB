@@ -23,17 +23,17 @@ simulate_bernoulli <- function(nreps,
     mutate(alpha = alpha, beta = beta)
 }
 
-vec_expected_loss_bernoulli <- function(nA, nB, sA, sB, alpha, beta, ...) {
+vec_prob_bernoulli <- function(nA, nB, sA, sB, alpha, beta, ...) {
   if (length(sA) > 1) {
     ret <- sapply(seq_along(nA), function(i) {
-      expected_loss_bernoulli(nA[i], nB[i], sA[i], sB[i], alpha[i], beta[i], ...)
+      prob_bernoulli(nA[i], nB[i], sA[i], sB[i], alpha[i], beta[i], ...)
     })
     return(ret)
   }
-  expected_loss_bernoulli(nA, nB, sA, sB, alpha, beta, ...)
+  prob_bernoulli(nA, nB, sA, sB, alpha, beta, ...)
 }
 
-expected_loss_bernoulli <- function(nA, nB, sA, sB, alpha, beta, ...){
+prob_bernoulli <- function(nA, nB, sA, sB, alpha, beta, ...){
   A_binom <- c(rep(1, sA), rep(0, nA - sA))
   B_binom <- c(rep(1, sB), rep(0, nB - sB))
   
@@ -45,7 +45,7 @@ expected_loss_bernoulli <- function(nA, nB, sA, sB, alpha, beta, ...){
     distribution = 'bernoulli')
   percLift = 0
   test_result = summary(binom_test, percentLift = percLift)
-  return(round(test_result$posteriorExpectedLoss$Probability,6))
+  return(round(test_result$probability$Probability,6))
 }
 
 vec_two_prop_pval <- function(nA, nB, sA, sB, ...) {
@@ -89,13 +89,13 @@ simulate_poisson <- function(nreps,
     mutate(alpha = alpha, beta = beta)
 }
 
-vec_expected_loss_poisson <- function(cumulative_movesA, cumulative_movesB, alpha, beta, ...) {
+vec_prob_poisson <- function(cumulative_movesA, cumulative_movesB, alpha, beta, ...) {
   sapply(seq_along(cumulative_movesA), function(i) {
-    expected_loss_poisson(cumulative_movesA[i], cumulative_movesB[i], alpha[i], beta[i],  ...)
+    prob_poisson(cumulative_movesA[i], cumulative_movesB[i], alpha[i], beta[i],  ...)
   })
 }
 
-expected_loss_poisson <- function(cumulative_movesA, cumulative_movesB, alpha, beta, ...){
+prob_poisson <- function(cumulative_movesA, cumulative_movesB, alpha, beta, ...){
   A_pois <- cumulative_movesA[[1]]
   B_pois <- cumulative_movesB[[1]]
   
@@ -107,7 +107,7 @@ expected_loss_poisson <- function(cumulative_movesA, cumulative_movesB, alpha, b
     distribution = 'poisson')
   percLift = 0
   test_result = summary(poisson_test, percentLift = percLift)
-  return(round(test_result$posteriorExpectedLoss$Lambda,6))
+  return(round(test_result$probability$Lambda,6))
 }
 
 vec_two_t_pval_moves <- function(cumulative_movesA, cumulative_movesB, ...) {
@@ -155,17 +155,17 @@ simulate_bernoulli_exponential <- function(nreps,
     mutate(alpha2 = alpha2, beta2 = beta2)
 }
 
-vec_expected_loss_bernoulli_exponential <- function(nA, nB, sA, sB, 
+vec_prob_bernoulli_exponential <- function(nA, nB, sA, sB, 
                                                     cumulative_spendA, cumulative_spendB,
                                                     alpha1, beta1, alpha2, beta2, ...) {
   sapply(seq_along(cumulative_spendA), function(i) {
-    expected_loss_bernoulli_exponential(nA[i], nB[i], sA[i], sB[i],
+    prob_bernoulli_exponential(nA[i], nB[i], sA[i], sB[i],
                                         cumulative_spendA[i], cumulative_spendB[i], 
                                         alpha1[i], beta1[i], alpha2[i], beta2[i],  ...)
   })
 }
 
-expected_loss_bernoulli_exponential <- function(nA, nB, sA, sB, 
+prob_bernoulli_exponential <- function(nA, nB, sA, sB, 
                                             cumulative_spendA, cumulative_spendB,
                                             alpha1, beta1, alpha2, beta2, ...){
   sampleA_idx <- sample(1:nA)
@@ -203,7 +203,7 @@ expected_loss_bernoulli_exponential <- function(nA, nB, sA, sB,
   
   percLift = 0
   test_result = summary(ber_exp_test, percentLift = percLift)
-  return(round(test_result$posteriorExpectedLoss$Expectation,6))
+  return(round(test_result$probability$Expectation,6))
 }
 
 vec_two_t_pval_spend <- function(cumulative_spendA, cumulative_spendB, ...) {
@@ -213,7 +213,7 @@ vec_two_t_pval_spend <- function(cumulative_spendA, cumulative_spendB, ...) {
 }
 
 two_t_pval_spend <- function(cumulative_spendA, cumulative_spendB, ...){
-  if((len(cumulative_spendA) < 5)|(len(cumulative_spendB) < 5)){
+  if((length(cumulative_spendA) < 5)|(length(cumulative_spendB) < 5)){
     return(NA)
   }
   x <- cumulative_spendA[[1]]

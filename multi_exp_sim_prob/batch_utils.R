@@ -15,18 +15,18 @@ evaluate_simulation <- function(design, row, ret, thresholds, prefix, cat, sig_t
   design[row, 'freq_treat'] <- format_percent(mean(last_pvalues < sig_thres))
   design[row, 'freq_treat_peek'] <- format_percent(mean(min_pvalues < sig_thres))
   
-  last_loss <- ret %>%
+  last_prob <- ret %>%
     group_by(replicate) %>%
-    summarize(last = last(expected_loss)) %>%
+    summarize(last = last(prob)) %>%
     .$last
-  min_loss <- ret %>%
+  max_prob <- ret %>%
     group_by(replicate) %>%
-    summarize(min = min(expected_loss)) %>%
-    .$min
+    summarize(max = max(prob)) %>% # actually P(A>B)
+    .$max
   
   for(thres in thresholds){
-    design[row, paste0('bayes_treat_', thres)] <- format_percent(mean(last_loss < thres))
-    design[row, paste0('bayes_treat_peek_', thres)] <- format_percent(mean(min_loss < thres))
+    design[row, paste0('bayes_treat_', thres)] <- format_percent(mean(last_prob > thres))
+    design[row, paste0('bayes_treat_peek_', thres)] <- format_percent(mean(max_prob > thres))
   }
   
   return(design)
