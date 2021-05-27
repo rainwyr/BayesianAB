@@ -30,9 +30,9 @@ Recall that
 
 All the percentages in the following tables are proportion of the simulated experiments that led to the conclusion that the treatment is chosen. 
 
-In Case 1 and 3 where the underlying treatment and control have no difference, the percentages mean false positive rates. Therefore, the lower the percentage, the better.
+In Case 1, 3, and 5 where the underlying treatment and control have no difference, the percentages mean false positive rates. Therefore, the lower the percentage, the better.
 
-In Case 2 and 4 where the treatment is better than control, the percentages mean true positive rates. Therefore, the higher the percentage, the better.
+In Case 2, 4, and 6 where the treatment is better than control, the percentages mean true positive rates. Therefore, the higher the percentage, the better.
 
 # Areas of Analysis
 
