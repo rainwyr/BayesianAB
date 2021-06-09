@@ -1,5 +1,5 @@
 ---
-title: "P(A>B) Based Analysis"
+title: "P(A>B) Based Analysis - Unbalanced Data"
 author: "Rain"
 date: "5/27/2021"
 output: pdf_document
@@ -13,7 +13,7 @@ library(knitr)
 source("analysis.R")
 ```
 
-This analysis is based on Bayesian result according to P(A>B) > 95%.
+This analysis is based on Bayesian result according to P(A>B) > 95% and unbalance ratio = 0.25 (treatmet:control = 4:1).
 
 Recall that
 
@@ -69,7 +69,7 @@ kable(case_df)
 
 We compare average false/true positive rate by directional, confident, and wrong priors.
 
-Conclusio: Bayesian's prior parameters do not matter much for the sample sizes we have.
+Conclusion: Bayesian's prior parameters do not matter much for the sample sizes we have.
 
 ```{r}
 case_df <- rbind(cbind(case = 1, analyze_prior(get_relevant_data(1))),
