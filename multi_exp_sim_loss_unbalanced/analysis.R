@@ -76,8 +76,8 @@ analyze_peeking <- function(case_df){
   case_df %>% 
     filter(sample_size_per_day == 500) %>%
     summarise(
-      avg_peek_multiplier_freq = round(mean(peek_multiplier_freq),2), 
-      avg_peek_multiplier_bayes = round(mean(peek_multiplier_bayes),2))
+      avg_peek_multiplier_freq = round(mean(peek_multiplier_freq, na.rm = TRUE),2), 
+      avg_peek_multiplier_bayes = round(mean(peek_multiplier_bayes, na.rm = TRUE),2))
 }
 analyze_sample_size <- function(case_df){
   case_df %>% 
